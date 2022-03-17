@@ -1,0 +1,1 @@
+export const Algolio = "http://hn.algolia.com/api/v1/search";
