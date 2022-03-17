@@ -1,36 +1,42 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useData } from "../custom-hooks/useData";
 import { Algolio } from "../url/Url";
-interface Props { }
+interface Props {}
 const ArticleSearch: React.FC<Props> = (): JSX.Element => {
-    const [data, query, setQuery, loading, error] = useData(Algolio);
+  const [data, query, setQuery, loading, error] = useData(Algolio);
 
-    const onHandleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setQuery(e.target.value || "");
-    };
-    return (
-        <>
-            <div>
-                <input
-                    type="text"
-                    value={query}
-                    onChange={(e) => onHandleQueryChange(e)}
-                />
-            </div>
-            {error && <p>{{ error }}</p>}
-            {loading && <p>loading...</p>}
+  useEffect(() => {
+    if (error) {
+      throw new Error(error);
+    }
+  }, [error]);
 
-            <div>
-                {data.map((article) => {
-                    return (
-                        <div key={article.id}>
-                            <a href={article.url}>{article.title}</a>
-                        </div>
-                    );
-                })}
-            </div>
-        </>
-    );
+  const onHandleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value || "");
+  };
+  return (
+    <>
+      <div>
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => onHandleQueryChange(e)}
+        />
+      
+
+      {loading && <p>loading...</p>}
+
+      {data.length >=1 &&
+        data.map((article) => {
+          return (
+            <a key={article.title} href={article.url}>
+              {article.title}
+            </a>
+          );
+        })}
+        </div>
+    </>
+  );
 };
 
 export default ArticleSearch;
